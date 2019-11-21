@@ -30,7 +30,6 @@ func CreateSlackClient(apiKey string) *slack.RTM {
 /*
    RespondToEvents waits for messages on the Slack client's incomingEvents channel,
    and sends a response when it detects the bot has been tagged in a message with @<botTag>.
-
    EDIT THIS FUNCTION IN THE SPACE INDICATED ONLY!
 */
 func RespondToEvents(slackClient *slack.RTM) {
@@ -53,6 +52,7 @@ func RespondToEvents(slackClient *slack.RTM) {
 			// ===============================================================
 			sendResponse(slackClient, message, ev.Channel)
 			sendHelp(slackClient, message, ev.Channel)
+			sendMessageAllCaps(slackClient, message, ev.Channel)
 			// ===============================================================
 			// END SLACKBOT CUSTOM CODE
 		default:
@@ -72,15 +72,23 @@ func sendHelp(slackClient *slack.RTM, message, slackChannel string) {
 // sendResponse is NOT unimplemented --- write code in the function body to complete!
 
 func sendResponse(slackClient *slack.RTM, message, slackChannel string) {
+	// the command is what the user typed in
 	command := strings.ToLower(message)
 	println("[RECEIVED] sendResponse:", command)
 
 	// START SLACKBOT CUSTOM CODE
 	// ===============================================================
 	// TODO:
-	//      1. Implement sendResponse for one or more of your custom Slackbot commands.
+	//      1. Implement sendResponse for one or more of your custom Slackbot commands.  
 	//         You could call an external API here, or create your own string response. Anything goes!
 	//      2. STRETCH: Write a goroutine that calls an external API based on the data received in this function.
 	// ===============================================================
 	// END SLACKBOT CUSTOM CODE
+}
+
+func sendMessageAllCaps(slackClient *slack.RTM, message, slackChannel string) {
+	// use built-in func to upper message
+	messageCaptilized := strings.ToUpper(message)
+	slackClient.SendMessage(slackClient.NewOutgoingMessage(messageCaptilized, slackChannel))
+	
 }
